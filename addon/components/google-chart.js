@@ -69,7 +69,7 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-    this.get('setupDependencies').perform();
+    this.set('firstRender', this.get('setup').perform());
 
     /* If the Ember version is less than 2.0.0... */
 
@@ -83,7 +83,7 @@ export default Component.extend({
     }
   },
 
-  didReceiveAttrs() {
+  didUpdateAttrs() {
     this._super(...arguments);
     this._rerenderChart();
   },
@@ -107,7 +107,7 @@ export default Component.extend({
     assert('You have created a chart type without a renderChart() method');
   },
 
-  setupDependencies: task(function* () {
+  setup: task(function* () {
     const type = this.get('type');
     const options = { id: 'setup-dependencies' };
 
@@ -115,13 +115,13 @@ export default Component.extend({
 
     yield this.get('googleCharts').loadPackages();
     this.sendAction('packagesDidLoad');
-    this.get('_renderChart').perform();
+    yield this.get('_renderChart').perform();
   }),
 
   _rerenderChart() {
-    if (this.get('chart') && this.get('data')) {
+    this.get('firstRender').then(() => {
       this.get('_renderChart').perform();
-    }
+    });
   },
 
   _handleResize() {
