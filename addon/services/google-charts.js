@@ -11,20 +11,9 @@ export default Service.extend({
     this._startLoad();
   },
 
-<<<<<<< c9c997ae6672bd0ef75e0eb293a540d9aff123de
   _startLoad() {
     const { google } = window;
 
-=======
-  init() {
-    this._super(...arguments);
-    this._startLoad();
-  },
-
-  _startLoad() {
-    const { google } = window;
-
->>>>>>> Clean up async chart loading
     google.charts.load('current', {
       language: this.get('language'),
       packages: this.get('googlePackages'),
